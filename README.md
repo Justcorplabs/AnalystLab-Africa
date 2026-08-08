@@ -295,15 +295,3 @@ NumPy
 Matplotlib
 
 SciPy
-
-Repository Structure
-
-employee-attrition-analysis/
-│
-├── data/
-│   └── WA_Fn-UseC_-HR-Employee-Attrition.csv
-│
-├── employee_attrition_analysis_final.ipynb
-├── README.md
-└── requirements.txt
-
