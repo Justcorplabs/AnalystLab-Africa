@@ -75,6 +75,3 @@ The analysis suggests that organisations should:
 * NumPy
 * Matplotlib
 * SciPy
-
-
-**Tinovimbanashe Shayamano**
