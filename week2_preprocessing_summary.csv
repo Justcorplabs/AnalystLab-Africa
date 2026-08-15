@@ -1,0 +1,13 @@
+Item,Value
+Source rows,1470
+Source columns,35
+Constant columns removed,"EmployeeCount, Over18, StandardHours"
+Identifier columns removed,EmployeeNumber
+Engineered features created,10
+Numerical features,30
+Categorical features,10
+Final ML features,72
+Training rows,1176
+Testing rows,294
+Training attrition rate (%),16.16
+Testing attrition rate (%),15.99
