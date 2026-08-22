@@ -2,7 +2,7 @@
 
 ## Data Science Internship Project
 
-This repository contains a multi-week employee attrition project based on the **IBM HR Analytics â€“ Employee Attrition & Performance** dataset.
+This repository contains a multi-week employee attrition project based on the **IBM HR Analytics - Employee Attrition & Performance** dataset.
 
 The project progresses from exploratory analysis in Week 1, through feature engineering and machine-learning preprocessing in Week 2, to advanced statistical analysis and feature refinement in Week 3.
 
@@ -21,7 +21,7 @@ The project progresses from exploratory analysis in Week 1, through feature engi
 
 ---
 
-## Week 1 â€” Business Understanding & Exploratory Data Analysis
+## Week 1 - Business Understanding & Exploratory Data Analysis
 
 Week 1 focused on understanding employee attrition patterns and translating them into business insights.
 
@@ -34,8 +34,8 @@ Week 1 focused on understanding employee attrition patterns and translating them
 - Correlation analysis
 - Chi-square tests
 - Welch's t-tests
-- Overtime Ã— Job Role interaction analysis
-- Business Travel Ã— Department interaction analysis
+- Overtime x Job Role interaction analysis
+- Business Travel x Department interaction analysis
 - Data visualisation
 - Business recommendations
 - Limitations and ethical considerations
@@ -53,7 +53,7 @@ These findings describe associations and do not establish causation.
 
 ---
 
-## Week 2 â€” Feature Engineering & Data Preprocessing
+## Week 2 - Feature Engineering & Data Preprocessing
 
 Week 2 prepares the same dataset for machine-learning model development.
 
@@ -99,49 +99,49 @@ Week 2 prepares the same dataset for machine-learning model development.
 - **30 numerical features**
 - **10 categorical features**
 - **72 transformed machine-learning features**
-- Final ML-ready dataset: **1,470 Ã— 74**
+- Final ML-ready dataset: **1,470 x 74**
 
 The encoder and scaler are fitted on the **training set only** to reduce data leakage.
 
 ---
 
-## Week 3 â€” Advanced Data Analysis, Statistical Validation & Feature Engineering
+## Week 3 - Advanced Data Analysis, Statistical Validation & Feature Engineering
 
-Week 3 builds directly on the Week 2 cleaned dataset (`cleaned_employee_attrition.csv`) â€” no re-cleaning of the raw data was performed.
+Week 3 builds directly on the Week 2 cleaned dataset (`cleaned_employee_attrition.csv`) - no re-cleaning of the raw data was performed.
 
 ### Analysis performed
 
 - 14 advanced visualisations (numerical, categorical, bivariate, multivariate, correlation, group comparisons, target-variable analysis)
-- 5 statistical hypothesis tests, each with stated Hâ‚€/Hâ‚, method justification, test statistic, p-value, and business interpretation:
-  - Chi-square test â€” Attrition Ã— OverTime
-  - Chi-square test â€” Attrition Ã— Marital Status
-  - Mann-Whitney U test â€” Monthly Income by Attrition
-  - Mann-Whitney U test â€” Distance From Home by Attrition
-  - Kruskal-Wallis test â€” Job Satisfaction across Job Role
-  - Spearman correlation â€” Years at Company vs. Years with Current Manager
+- 5 statistical hypothesis tests, each with stated H0/H1, method justification, test statistic, p-value, and business interpretation:
+  - Chi-square test - Attrition x OverTime
+  - Chi-square test - Attrition x Marital Status
+  - Mann-Whitney U test - Monthly Income by Attrition
+  - Mann-Whitney U test - Distance From Home by Attrition
+  - Kruskal-Wallis test - Job Satisfaction across Job Role
+  - Spearman correlation - Years at Company vs. Years with Current Manager
 - Feature evaluation and selection (correlation analysis, mutual information, multicollinearity check)
 - Dataset refinement into a final modelling dataset
 - Business Insights and Recommendations report
 
 ### New engineered features
 
-- `SatisfactionIndex` â€” composite mean of the four satisfaction/balance survey scores
-- `CompaRatio` â€” Monthly Income relative to the average for the employee's job level
-- `JobHopIntensity` â€” number of prior companies relative to total working years
-- `StagnationRiskFlag` â€” compound flag for overtime + poor work-life balance + no recent promotion
+- `SatisfactionIndex` - composite mean of the four satisfaction/balance survey scores
+- `CompaRatio` - Monthly Income relative to the average for the employee's job level
+- `JobHopIntensity` - number of prior companies relative to total working years
+- `StagnationRiskFlag` - compound flag for overtime + poor work-life balance + no recent promotion
 
 ### Feature evaluation decisions
 
-- **Removed:** `LongCommuteFlag` â€” a deterministic re-encoding of `DistanceFromHome`, redundant.
-- **Retained with a multicollinearity note:** `YearsAtCompany`, `YearsInCurrentRole`, `YearsWithCurrManager` (correlated 0.71â€“0.84), flagged for Week 4 modelling choices.
-- **Retained with a data-quality note:** `PerformanceRating` has only two observed values across the dataset â€” a real limitation, not an error.
+- **Removed:** `LongCommuteFlag` - a deterministic re-encoding of `DistanceFromHome`, redundant.
+- **Retained with a multicollinearity note:** `YearsAtCompany`, `YearsInCurrentRole`, `YearsWithCurrManager` (correlated 0.71-0.84), flagged for Week 4 modelling choices.
+- **Retained with a data-quality note:** `PerformanceRating` has only two observed values across the dataset - a real limitation, not an error.
 
 ### Week 3 output
 
-- Final modelling dataset: **1,470 rows Ã— 45 columns**
+- Final modelling dataset: **1,470 rows x 45 columns**
 - Business Insights and Recommendations report (Word document)
 
-Key findings: overtime, marital status, and monthly income (relative to job-level peers) are all statistically significantly associated with attrition. Job satisfaction does **not** differ significantly across job roles â€” role-level attrition differences are better explained by workload and pay structure than by reported satisfaction.
+Key findings: overtime, marital status, and monthly income (relative to job-level peers) are all statistically significantly associated with attrition. Job satisfaction does **not** differ significantly across job roles - role-level attrition differences are better explained by workload and pay structure than by reported satisfaction.
 
 ---
 
@@ -149,22 +149,22 @@ Key findings: overtime, marital status, and monthly income (relative to job-leve
 
 ```text
 employee-attrition-analysis/
-â”‚
-â”œâ”€â”€ data/
-â”‚   â”œâ”€â”€ WA_Fn-UseC_-HR-Employee-Attrition.csv
-â”‚   â”œâ”€â”€ cleaned_employee_attrition.csv
-â”‚   â”œâ”€â”€ employee_attrition_ml_ready.csv
-â”‚   â””â”€â”€ employee_attrition_final_modelling_dataset.csv
-â”‚
-â”œâ”€â”€ employee_attrition_analysis.ipynb
-â”œâ”€â”€ week2_feature_engineering_preprocessing_final.ipynb
-â”œâ”€â”€ week2_data_audit.csv
-â”œâ”€â”€ week2_preprocessing_summary.csv
-â”œâ”€â”€ week3_advanced_analysis_statistical_validation.ipynb
-â”œâ”€â”€ week3_business_insights_and_recommendations.docx
-â”œâ”€â”€ week3_data_dictionary.md
-â”œâ”€â”€ README.md
-â””â”€â”€ requirements.txt
+|
+|-- data/
+|   |-- WA_Fn-UseC_-HR-Employee-Attrition.csv
+|   |-- cleaned_employee_attrition.csv
+|   |-- employee_attrition_ml_ready.csv
+|   `-- employee_attrition_final_modelling_dataset.csv
+|
+|-- employee_attrition_analysis.ipynb
+|-- week2_feature_engineering_preprocessing_final.ipynb
+|-- week2_data_audit.csv
+|-- week2_preprocessing_summary.csv
+|-- week3_advanced_analysis_statistical_validation.ipynb
+|-- week3_business_insights_and_recommendations.docx
+|-- week3_data_dictionary.md
+|-- README.md
+`-- requirements.txt
 ```
 
 ---
@@ -201,3 +201,7 @@ The Week 3 final modelling dataset will be used to train and compare classificat
 ## Repository
 
 https://github.com/Justcorplabs/employee-attrition-analysis
+
+## Author
+
+**Bynadge Joseph Jakarasi **
