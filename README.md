@@ -1,8 +1,17 @@
-# Employee Attrition Analysis
+# JustCorp Labs - Data Science Internship Portfolio (AnalystLab Africa)
+
+This repository contains multiple internship projects completed as part of the AnalystLab Africa Data Science Internship and Experience Lab Programme.
+
+1. **Employee Attrition Analysis** (Weeks 1-3) - a solo project analysing the IBM HR Analytics dataset.
+2. **HealthConnect Experience Lab** (Week 4 onwards) - a shared cross-track project, contributed to from the Data Science track's perspective.
+
+---
+
+# Project 1: Employee Attrition Analysis
 
 ## Data Science Internship Project
 
-This repository contains a multi-week employee attrition project based on the **IBM HR Analytics - Employee Attrition & Performance** dataset.
+This part of the repository contains a multi-week employee attrition project based on the **IBM HR Analytics - Employee Attrition & Performance** dataset.
 
 The project progresses from exploratory analysis in Week 1, through feature engineering and machine-learning preprocessing in Week 2, to advanced statistical analysis and feature refinement in Week 3.
 
@@ -133,7 +142,7 @@ Week 3 builds directly on the Week 2 cleaned dataset (`cleaned_employee_attritio
 ### Feature evaluation decisions
 
 - **Removed:** `LongCommuteFlag` - a deterministic re-encoding of `DistanceFromHome`, redundant.
-- **Retained with a multicollinearity note:** `YearsAtCompany`, `YearsInCurrentRole`, `YearsWithCurrManager` (correlated 0.71-0.84), flagged for Week 4 modelling choices.
+- **Retained with a multicollinearity note:** `YearsAtCompany`, `YearsInCurrentRole`, `YearsWithCurrManager` (correlated 0.71-0.84), flagged for later modelling choices.
 - **Retained with a data-quality note:** `PerformanceRating` has only two observed values across the dataset - a real limitation, not an error.
 
 ### Week 3 output
@@ -145,31 +154,26 @@ Key findings: overtime, marital status, and monthly income (relative to job-leve
 
 ---
 
-## Repository Structure
+## Project 1 Repository Structure
 
 ```text
-employee-attrition-analysis/
-|
-|-- data/
-|   |-- WA_Fn-UseC_-HR-Employee-Attrition.csv
-|   |-- cleaned_employee_attrition.csv
-|   |-- employee_attrition_ml_ready.csv
-|   `-- employee_attrition_final_modelling_dataset.csv
-|
-|-- employee_attrition_analysis.ipynb
-|-- week2_feature_engineering_preprocessing_final.ipynb
-|-- week2_data_audit.csv
-|-- week2_preprocessing_summary.csv
-|-- week3_advanced_analysis_statistical_validation.ipynb
-|-- week3_business_insights_and_recommendations.docx
-|-- week3_data_dictionary.md
-|-- README.md
-`-- requirements.txt
+data/
+  WA_Fn-UseC_-HR-Employee-Attrition.csv
+  cleaned_employee_attrition.csv
+  employee_attrition_ml_ready.csv
+  employee_attrition_final_modelling_dataset.csv
+
+employee_attrition_analysis.ipynb
+week2_feature_engineering_preprocessing_final.ipynb
+week2_data_audit.csv
+week2_preprocessing_summary.csv
+week3_advanced_analysis_statistical_validation.ipynb
+week3_business_insights_and_recommendations.docx
+week3_data_dictionary.md
+requirements.txt
 ```
 
----
-
-## Tools Used
+## Tools Used (Project 1)
 
 - Python
 - Jupyter Notebook / Google Colab
@@ -180,9 +184,7 @@ employee-attrition-analysis/
 - SciPy
 - scikit-learn
 
----
-
-## Current Project Status
+## Project 1 Status
 
 ### Completed
 
@@ -190,11 +192,93 @@ employee-attrition-analysis/
 - Week 2: Feature Engineering & Data Preprocessing
 - Week 3: Advanced Data Analysis, Statistical Validation & Feature Engineering
 
+This project is not being extended further - it stands as a complete three-week body of work, kept in this repository as part of the internship learning journey. Active development has moved to the HealthConnect Experience Lab below.
+
+---
+
+# Project 2: HealthConnect Experience Lab
+
+## AnalystLab Africa Experience Lab - Data Science Track
+
+Starting Week 4, all AnalystLab Africa interns began contributing to a single shared business problem - **HealthConnect Clinic**, a fictional healthcare provider - from their own professional track's perspective (Project Management, Data Analytics, Data Science, Machine Learning Engineering, Generative AI).
+
+**Central project question:** How can HealthConnect Clinic use data and AI to reduce missed appointments and improve the patient support experience?
+
+This part of the repository contains the **Data Science track's** contribution only.
+
+### Project stages
+
+Problem Understanding (Week 4) -> Analysis & Solution Design -> Development -> Testing & Refinement -> Final Presentation
+
+---
+
+## Week 4 - HealthConnect Project Kickoff & Problem Understanding
+
+Week 4 is a planning and scoping stage - not a full analysis or a trained model. The goal was to understand the business problem, assess the real appointment dataset, and define the machine learning problem the Data Science track will pursue in later weeks.
+
+### Dataset reviewed
+
+`HealthConnect_Appointment_Data.csv` - 5,000 fictional, anonymised appointment records, 18 columns covering patient demographics, appointment details, booking information, prior no-show history, reminder information, distance to clinic, waiting time, and appointment outcome.
+
+`HealthConnect_Data_Dictionary.xlsx` was not available at the time of this submission; column meanings were inferred from the data itself and flagged for confirmation once accessible.
+
+### Key data findings
+
+- No duplicate rows; missingness is low (under 2% on distance and waiting-time fields), and one apparent gap (`reminder_channel`) turned out to be structural, not a quality issue.
+- The outcome variable is three-valued: `No-Show` (48.5%), `Attended` (46.3%), `Cancelled` (5.3%).
+- `previous_no_shows` and `booking_lead_days` both show strong, consistent relationships with no-show rate.
+- 5,000 appointments belong to only 1,696 unique patients (repeat patients), which affects how the data should be split for modelling.
+
+### Proposed target variable
+
+Binary: `did_not_attend` (`1` = No-Show, `0` = Attended). `Cancelled` appointments are excluded from this target, since a cancellation is a proactive, advance-notice action, operationally different from a silent no-show.
+
+### Proposed approach
+
+- Candidate features: prior no-show history, prior appointment count, booking lead time, distance to clinic, age, gender, appointment type, day, and time.
+- `waiting_time_minutes` excluded pending confirmation of its exact definition - a possible data-leakage risk if it reflects actual (rather than scheduled) waiting time.
+- Candidate models: logistic regression (interpretable baseline) and a tree-based model (Random Forest / Gradient Boosting).
+- Proposed patient-grouped train/test split (`GroupShuffleSplit` by `patient_id`) to avoid the same patient appearing in both sets.
+- Primary evaluation metrics: precision, recall, and ROC-AUC.
+
+### Week 4 output
+
+- `week4_ml_problem_definition.ipynb` - Machine Learning Problem Definition notebook, executed against the real dataset.
+- `week4_project_summary.docx` - concise Week 4 Project Summary.
+
+### Proposed focus for Week 5
+
+Obtain and incorporate the official data dictionary to confirm column definitions, then move into deeper exploratory analysis of the confirmed feature set, implement the patient-grouped train/test split, and build an initial baseline logistic regression model.
+
+---
+
+## HealthConnect Repository Structure
+
+```text
+healthconnect-experience-lab/
+  data/
+    HealthConnect_Appointment_Data.csv
+  week4_ml_problem_definition.ipynb
+  week4_project_summary.docx
+```
+
+## Tools Used (HealthConnect - Data Science track)
+
+- Python
+- Jupyter Notebook / Google Colab
+- pandas
+- NumPy
+- scikit-learn
+
+## HealthConnect Project Status
+
+### Completed
+
+- Week 4: Problem Understanding (Data Science track)
+
 ### Next Stage
 
-**Week 4: Machine Learning Model Development, Evaluation & Business Recommendations**
-
-The Week 3 final modelling dataset will be used to train and compare classification models using metrics appropriate for an imbalanced target (recall, precision, ROC-AUC rather than accuracy alone).
+**Week 5: Analysis and Solution Design**
 
 ---
 
@@ -202,6 +286,4 @@ The Week 3 final modelling dataset will be used to train and compare classificat
 
 https://github.com/Justcorplabs/employee-attrition-analysis
 
-## Author
 
-**Bynadge Joseph Jakarasi **
