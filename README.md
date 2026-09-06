@@ -208,7 +208,7 @@ This part of the repository contains the **Data Science track's** contribution o
 
 ### Project stages
 
-Problem Understanding (Week 4) -> Analysis & Solution Design -> Development -> Testing & Refinement -> Final Presentation
+Problem Understanding (Week 4) -> Analysis & Solution Design (Week 5) -> Development -> Testing & Refinement -> Final Presentation
 
 ---
 
@@ -246,20 +246,68 @@ Binary: `did_not_attend` (`1` = No-Show, `0` = Attended). `Cancelled` appointmen
 - `week4_ml_problem_definition.ipynb` - Machine Learning Problem Definition notebook, executed against the real dataset.
 - `week4_project_summary.docx` - concise Week 4 Project Summary.
 
-### Proposed focus for Week 5
+---
 
-Obtain and incorporate the official data dictionary to confirm column definitions, then move into deeper exploratory analysis of the confirmed feature set, implement the patient-grouped train/test split, and build an initial baseline logistic regression model.
+## Week 5 - Data Preparation, Feature Engineering & Baseline Model Development
+
+Week 5 moves from planning into practical work: preparing the data, engineering features, defining a train/test strategy, and training a baseline classification model. The focus is a **reliable baseline**, not the best-performing model - that refinement is reserved for Week 6.
+
+### Data preparation
+
+- No duplicate rows or duplicate `appointment_id` values; all categorical columns contain clean, consistent labels.
+- `appointment_day` was cross-checked against the actual calendar date in `appointment_date` and found fully consistent.
+- Missing values (`distance_to_clinic_km`, ~1.8%) handled with median imputation, given the right-skewed distribution.
+- Re-confirmed the Week 4 target decision (`did_not_attend`, `Cancelled` excluded) and the exclusion of `waiting_time_minutes` on leakage grounds - both still unresolved by the missing data dictionary.
+
+### New engineered features
+
+- `personal_noshow_rate` - previous no-shows as a share of previous appointments (with a flag for first-time patients who have no history).
+- `is_new_patient` - binary flag for patients with zero prior appointments.
+- `long_lead_flag` - binary flag for bookings made 31+ days in advance, based on a visible jump in no-show rate at that threshold.
+- `high_risk_combo` - compound flag: 2+ prior no-shows **and** a 30+ day booking lead time. The strongest single engineered signal found (75.6% no-show rate in this group vs. a ~50% baseline).
+
+### Train/test strategy
+
+A patient-grouped 80/20 split (`GroupShuffleSplit` on `patient_id`), verified to have **zero patient overlap** between train and test - avoiding the risk of the model "recognising" a patient it already saw during training.
+
+### Baseline model and results
+
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|---|---|---|---|---|---|
+| Logistic Regression (baseline) | 0.627 | 0.623 | 0.646 | 0.634 | 0.679 |
+| Random Forest (comparison) | 0.639 | 0.647 | 0.611 | 0.628 | 0.682 |
+
+`booking_lead_days` and `previous_no_shows` were confirmed as the strongest predictors by model coefficient, consistent with the Week 4 and Week 5 exploratory findings.
+
+### Modelling limitations identified
+
+- A `-1` sentinel value used for first-time patients inside `personal_noshow_rate` likely distorted that feature's coefficient in the linear model - flagged as a concrete Week 6 fix rather than left unexamined.
+- Dataset remains synthetic; metrics should be read as a demonstration of process, not a real-world-ready result.
+- `waiting_time_minutes` remains excluded pending the still-unavailable data dictionary.
+
+### Week 5 output
+
+- `week5_baseline_modelling.ipynb` - full data preparation, feature engineering, baseline modelling, and evaluation notebook, executed against the real dataset.
+- `week5_project_summary.docx` - concise Week 5 Project Summary.
+
+### Proposed focus for Week 6
+
+Fix the `personal_noshow_rate` sentinel-value issue, tune the Random Forest given its early edge over the baseline, add patient-grouped cross-validation, and revisit `waiting_time_minutes` once the data dictionary is confirmed.
 
 ---
 
 ## HealthConnect Repository Structure
 
+HealthConnect files are kept alongside the attrition project files at the root of this repository, following the same flat layout used since Week 1:
+
 ```text
-healthconnect-experience-lab/
-  data/
-    HealthConnect_Appointment_Data.csv
-  week4_ml_problem_definition.ipynb
-  week4_project_summary.docx
+data/
+  HealthConnect_Appointment_Data.csv   (alongside the attrition data files)
+
+week4_ml_problem_definition.ipynb
+week4_project_summary.docx
+week5_baseline_modelling.ipynb
+week5_project_summary.docx
 ```
 
 ## Tools Used (HealthConnect - Data Science track)
@@ -268,6 +316,8 @@ healthconnect-experience-lab/
 - Jupyter Notebook / Google Colab
 - pandas
 - NumPy
+- Matplotlib
+- Seaborn
 - scikit-learn
 
 ## HealthConnect Project Status
@@ -275,15 +325,14 @@ healthconnect-experience-lab/
 ### Completed
 
 - Week 4: Problem Understanding (Data Science track)
+- Week 5: Data Preparation, Feature Engineering & Baseline Model Development (Data Science track)
 
 ### Next Stage
 
-**Week 5: Analysis and Solution Design**
+**Week 6: Model Refinement**
 
 ---
 
 ## Repository
 
 https://github.com/Justcorplabs/employee-attrition-analysis
-
-
