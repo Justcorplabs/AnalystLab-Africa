@@ -208,7 +208,7 @@ This part of the repository contains the **Data Science track's** contribution o
 
 ### Project stages
 
-Problem Understanding (Week 4) -> Analysis & Solution Design (Week 5) -> Development -> Testing & Refinement -> Final Presentation
+Problem Understanding (Week 4) -> Analysis & Development (Week 5) -> Integration & Advanced Development (Week 6) -> Testing & Refinement (Week 7) -> Final Integration & Presentation (Week 8)
 
 ---
 
@@ -220,7 +220,7 @@ Week 4 is a planning and scoping stage - not a full analysis or a trained model.
 
 `HealthConnect_Appointment_Data.csv` - 5,000 fictional, anonymised appointment records, 18 columns covering patient demographics, appointment details, booking information, prior no-show history, reminder information, distance to clinic, waiting time, and appointment outcome.
 
-`HealthConnect_Data_Dictionary.xlsx` was not available at the time of this submission; column meanings were inferred from the data itself and flagged for confirmation once accessible.
+`HealthConnect_Data_Dictionary.xlsx` was not available at the time of this submission; column meanings were inferred from the data itself and flagged for confirmation once accessible - this remains unresolved as of Week 7.
 
 ### Key data findings
 
@@ -233,66 +233,125 @@ Week 4 is a planning and scoping stage - not a full analysis or a trained model.
 
 Binary: `did_not_attend` (`1` = No-Show, `0` = Attended). `Cancelled` appointments are excluded from this target, since a cancellation is a proactive, advance-notice action, operationally different from a silent no-show.
 
-### Proposed approach
-
-- Candidate features: prior no-show history, prior appointment count, booking lead time, distance to clinic, age, gender, appointment type, day, and time.
-- `waiting_time_minutes` excluded pending confirmation of its exact definition - a possible data-leakage risk if it reflects actual (rather than scheduled) waiting time.
-- Candidate models: logistic regression (interpretable baseline) and a tree-based model (Random Forest / Gradient Boosting).
-- Proposed patient-grouped train/test split (`GroupShuffleSplit` by `patient_id`) to avoid the same patient appearing in both sets.
-- Primary evaluation metrics: precision, recall, and ROC-AUC.
-
 ### Week 4 output
 
-- `week4_ml_problem_definition.ipynb` - Machine Learning Problem Definition notebook, executed against the real dataset.
-- `week4_project_summary.docx` - concise Week 4 Project Summary.
+- `week4_ml_problem_definition.ipynb`
+- `week4_project_summary.docx`
 
 ---
 
 ## Week 5 - Data Preparation, Feature Engineering & Baseline Model Development
 
-Week 5 moves from planning into practical work: preparing the data, engineering features, defining a train/test strategy, and training a baseline classification model. The focus is a **reliable baseline**, not the best-performing model - that refinement is reserved for Week 6.
-
-### Data preparation
-
-- No duplicate rows or duplicate `appointment_id` values; all categorical columns contain clean, consistent labels.
-- `appointment_day` was cross-checked against the actual calendar date in `appointment_date` and found fully consistent.
-- Missing values (`distance_to_clinic_km`, ~1.8%) handled with median imputation, given the right-skewed distribution.
-- Re-confirmed the Week 4 target decision (`did_not_attend`, `Cancelled` excluded) and the exclusion of `waiting_time_minutes` on leakage grounds - both still unresolved by the missing data dictionary.
+Week 5 moved from planning into practical work: preparing the data, engineering features, defining a train/test strategy, and training a baseline classification model.
 
 ### New engineered features
 
-- `personal_noshow_rate` - previous no-shows as a share of previous appointments (with a flag for first-time patients who have no history).
+- `personal_noshow_rate` - previous no-shows as a share of previous appointments (later refined in Week 6 - see below).
 - `is_new_patient` - binary flag for patients with zero prior appointments.
-- `long_lead_flag` - binary flag for bookings made 31+ days in advance, based on a visible jump in no-show rate at that threshold.
-- `high_risk_combo` - compound flag: 2+ prior no-shows **and** a 30+ day booking lead time. The strongest single engineered signal found (75.6% no-show rate in this group vs. a ~50% baseline).
+- `long_lead_flag` - binary flag for bookings made 31+ days in advance.
+- `high_risk_combo` - compound flag: 2+ prior no-shows **and** a 30+ day booking lead time. The strongest single engineered signal found (75.6% no-show rate vs. a ~50% baseline).
 
 ### Train/test strategy
 
-A patient-grouped 80/20 split (`GroupShuffleSplit` on `patient_id`), verified to have **zero patient overlap** between train and test - avoiding the risk of the model "recognising" a patient it already saw during training.
+A patient-grouped 80/20 split (`GroupShuffleSplit` on `patient_id`), verified to have **zero patient overlap** between train and test.
 
-### Baseline model and results
+### Baseline results
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
 |---|---|---|---|---|---|
-| Logistic Regression (baseline) | 0.627 | 0.623 | 0.646 | 0.634 | 0.679 |
+| Logistic Regression (baseline) | 0.626 | 0.623 | 0.646 | 0.634 | 0.679 |
 | Random Forest (comparison) | 0.639 | 0.647 | 0.611 | 0.628 | 0.682 |
 
-`booking_lead_days` and `previous_no_shows` were confirmed as the strongest predictors by model coefficient, consistent with the Week 4 and Week 5 exploratory findings.
+### Limitation identified
 
-### Modelling limitations identified
-
-- A `-1` sentinel value used for first-time patients inside `personal_noshow_rate` likely distorted that feature's coefficient in the linear model - flagged as a concrete Week 6 fix rather than left unexamined.
-- Dataset remains synthetic; metrics should be read as a demonstration of process, not a real-world-ready result.
-- `waiting_time_minutes` remains excluded pending the still-unavailable data dictionary.
+A `-1` sentinel value used for first-time patients inside `personal_noshow_rate` likely distorted that feature's coefficient in the linear model - flagged for Week 6 rather than left unexamined.
 
 ### Week 5 output
 
-- `week5_baseline_modelling.ipynb` - full data preparation, feature engineering, baseline modelling, and evaluation notebook, executed against the real dataset.
-- `week5_project_summary.docx` - concise Week 5 Project Summary.
+- `week5_baseline_modelling.ipynb`
+- `week5_project_summary.docx`
 
-### Proposed focus for Week 6
+---
 
-Fix the `personal_noshow_rate` sentinel-value issue, tune the Random Forest given its early edge over the baseline, add patient-grouped cross-validation, and revisit `waiting_time_minutes` once the data dictionary is confirmed.
+## Week 6 - Model Improvement, Error Analysis & Validation
+
+Week 6 did not repeat the Week 5 baseline. It analysed exactly where that baseline failed, fixed the sentinel-value issue it flagged, integrated a cross-track feature, and developed a tuned candidate model.
+
+### Fix applied: `personal_noshow_rate_v2`
+
+New patients are now given the **training-set mean no-show rate** (computed from patients with history, training split only) instead of the `-1` sentinel. Correlation with `is_new_patient` dropped from **-0.723 to ~0.002**, confirming the distortion is resolved.
+
+### Cross-track integration
+
+**Track worked with:** Data Analytics. A no-show-rate-by-channel breakdown showed real separation across reminder channels, so `reminder_channel` (not just `reminder_sent`) was added as a feature to every non-baseline model. (Documented transparently as a self-produced, provisional finding in the absence of a live Data Analytics deliverable for this submission - re-examined in Week 7.)
+
+### Cross-validated, tuned candidate models
+
+5-fold patient-grouped cross-validation (`GroupKFold`) plus `RandomizedSearchCV` hyperparameter tuning over Random Forest and Gradient Boosting.
+
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|---|---|---|---|---|---|
+| Week 5 Baseline (LR, unrefined) | 0.626 | 0.623 | 0.646 | 0.634 | 0.679 |
+| Refined Logistic Regression (fixed features) | ~0.63 | ~0.63 | ~0.65 | ~0.64 | ~0.68 |
+| Tuned Random Forest | - | - | - | - | 0.693 |
+| **Tuned Gradient Boosting (Week 6 candidate)** | 0.641 | 0.638 | **0.652** | **0.645** | 0.689 |
+
+**Week 6 recommendation:** Tuned Gradient Boosting, on the basis of best recall/F1 among all models tested - re-examined and partly revised in Week 7 (see below).
+
+### New issues discovered in Week 6
+
+- `personal_noshow_rate_v2` still correlates with its own raw-count inputs (`previous_no_shows`, `previous_appointments`) - a different multicollinearity concern than the one just fixed.
+- Error rates are meaningfully higher for **Specialist Consultation** appointments and the **65+** age group, with no feature yet explaining why.
+
+### Week 6 output
+
+- `week6_model_improvement.ipynb`
+- `week6_project_summary.docx`
+
+---
+
+## Week 7 - Model Testing, Error Analysis & Refinement
+
+Week 7 did not repeat Week 6. It systematically tested the five concrete requirements Week 6's own notebook had flagged as needing testing, refined the model based on real evidence, and re-tested. This is the point where one week's findings materially revised the previous week's recommendation, rather than just confirming it.
+
+### Test 1 - Multicollinearity resolution
+
+Dropping `previous_no_shows` and `previous_appointments` (to remove the correlation with `personal_noshow_rate_v2`) made performance slightly **worse**, not better. Multicollinearity distorts *linear-model* coefficients; it's not the same concern for a tree-based model like Gradient Boosting. **Action:** kept all three features.
+
+### Test 2 - Segment-level testing with confidence intervals
+
+Bootstrap 95% CIs confirmed the Week 6 concern is real: Specialist Consultation (55.4% recall, CI [45.7%, 65.9%]) and Age 65+ (55.9% recall, CI [46.4%, 65.1%]) both sit meaningfully below Diagnostic Test appointments (82.1% recall). **Action:** documented as a known, unresolved model limitation rather than silently patched.
+
+### Test 3 - Threshold analysis
+
+Lowering the classification threshold from 0.50 to **0.40** raised recall from 65.2% to **85.7%** and, unexpectedly, also improved F1 (0.645 -> 0.681) - a genuine improvement with no retraining required. **Action:** adopted threshold = 0.40 as the refined operating point.
+
+### Test 4 - Stability check across data splits
+
+Rerunning the Week 6 model comparison on two additional random seeds found the Gradient Boosting candidate's reported edge over Logistic Regression (+0.012 ROC-AUC) does **not** hold up - it was -0.002 and -0.005 on the other two splits (average ~+0.002, within noise). **This revises the Week 6 recommendation**: Gradient Boosting is no longer presented as decisively better, only as the more threshold-tunable option; Logistic Regression is carried forward as a legitimate, more interpretable alternative.
+
+### Test 5 - Mandatory HC-POD cross-track testing
+
+Stress-tested the Week 6 `reminder_channel` finding with bootstrap confidence intervals: "a reminder was sent vs. not" is statistically solid, but the channel-to-channel distinction (WhatsApp vs SMS vs Email) is not - their CIs overlap heavily. **Retest:** retrained the model without `reminder_channel`; performance was statistically indistinguishable (0.640 vs 0.641 accuracy). **Validated outcome:** the feature is kept (it's harmless) but the confidence attached to the channel-specific claim is now correctly calibrated as weak, correcting what Week 6 had presented as a solid finding.
+
+### Refined model (re-tested)
+
+| Metric | Week 5 Baseline (LR) | Week 6 Candidate (GB, threshold=0.50) | Week 7 Refined (GB, threshold=0.40) |
+|---|---|---|---|
+| Accuracy | 0.626 | 0.641 | 0.641 |
+| Precision | 0.623 | 0.638 | 0.565 |
+| Recall | 0.646 | 0.652 | **0.857** |
+| F1-score | 0.634 | 0.645 | **0.681** |
+| ROC-AUC | 0.679 | 0.689 | 0.689 |
+
+### Model suitability assessment
+
+Conditionally ready for limited, monitored use (e.g. a staff-facing risk list) - not yet ready to be presented as a uniformly reliable production model, given the unresolved segment gap and the now-tempered comparison against the simpler baseline.
+
+### Week 7 output
+
+- `week7_model_testing_refinement.ipynb`
+- `week7_project_summary.docx`
 
 ---
 
@@ -308,6 +367,10 @@ week4_ml_problem_definition.ipynb
 week4_project_summary.docx
 week5_baseline_modelling.ipynb
 week5_project_summary.docx
+week6_model_improvement.ipynb
+week6_project_summary.docx
+week7_model_testing_refinement.ipynb
+week7_project_summary.docx
 ```
 
 ## Tools Used (HealthConnect - Data Science track)
@@ -326,10 +389,18 @@ week5_project_summary.docx
 
 - Week 4: Problem Understanding (Data Science track)
 - Week 5: Data Preparation, Feature Engineering & Baseline Model Development (Data Science track)
+- Week 6: Model Improvement, Error Analysis & Validation (Data Science track)
+- Week 7: Model Testing, Error Analysis & Refinement (Data Science track)
 
 ### Next Stage
 
-**Week 6: Model Refinement**
+**Week 8: Final Integration & Presentation**
+
+### Outstanding before Week 8
+
+- `HealthConnect_Data_Dictionary.xlsx` still unavailable, now flagged for four consecutive weeks (affects `waiting_time_minutes`, which remains excluded on an unconfirmed leakage concern).
+- Decide whether to present Gradient Boosting alone or alongside Logistic Regression at final integration, given Week 7's stability-check finding.
+- No real HealthConnect intervention-capacity figure yet exists to fully validate the Week 7 threshold choice (0.40) against actual operational limits.
 
 ---
 
