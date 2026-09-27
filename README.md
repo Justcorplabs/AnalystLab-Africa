@@ -1,162 +1,130 @@
-# JustCorp Labs - Data Science Internship Portfolio (AnalystLab Africa)
+JustCorp Labs - Data Science Internship Portfolio (AnalystLab Africa)
 
 This repository contains multiple internship projects completed as part of the AnalystLab Africa Data Science Internship and Experience Lab Programme.
 
-1. **Employee Attrition Analysis** (Weeks 1-3) - a solo project analysing the IBM HR Analytics dataset.
-2. **HealthConnect Experience Lab** (Week 4 onwards) - a shared cross-track project, contributed to from the Data Science track's perspective.
+Employee Attrition Analysis (Weeks 1-3) - a solo project analysing the IBM HR Analytics dataset.
+HealthConnect Experience Lab (Weeks 4-8) - a shared cross-track project, contributed to from the Data Science track's perspective. Complete.
+Project 1: Employee Attrition Analysis
+Data Science Internship Project
 
----
-
-# Project 1: Employee Attrition Analysis
-
-## Data Science Internship Project
-
-This part of the repository contains a multi-week employee attrition project based on the **IBM HR Analytics - Employee Attrition & Performance** dataset.
+This part of the repository contains a multi-week employee attrition project based on the IBM HR Analytics - Employee Attrition & Performance dataset.
 
 The project progresses from exploratory analysis in Week 1, through feature engineering and machine-learning preprocessing in Week 2, to advanced statistical analysis and feature refinement in Week 3.
 
----
-
-## Dataset
-
-- **1,470 employees**
-- **35 original variables**
-- Target: `Attrition`
-- **237 employees left**
-- **1,233 employees remained**
-- Overall attrition rate: **16.12%**
-- No missing values
-- No duplicate rows
-
----
-
-## Week 1 - Business Understanding & Exploratory Data Analysis
+Dataset
+1,470 employees
+35 original variables
+Target: Attrition
+237 employees left
+1,233 employees remained
+Overall attrition rate: 16.12%
+No missing values
+No duplicate rows
+Week 1 - Business Understanding & Exploratory Data Analysis
 
 Week 1 focused on understanding employee attrition patterns and translating them into business insights.
 
-### Analysis included
-
-- Data quality assessment
-- Exploratory Data Analysis (EDA)
-- Descriptive statistics
-- Employee segmentation
-- Correlation analysis
-- Chi-square tests
-- Welch's t-tests
-- Overtime x Job Role interaction analysis
-- Business Travel x Department interaction analysis
-- Data visualisation
-- Business recommendations
-- Limitations and ethical considerations
-
-### Key findings
-
-- Overall attrition was **16.12%**.
-- Employees working overtime had substantially higher observed attrition.
-- Frequent business travellers experienced higher attrition.
-- Attrition varied across job roles and departments.
-- Employees who left were generally younger, earned less, and had shorter organisational tenure.
-- Interaction analysis showed that overtime and travel-related attrition patterns differed across roles and departments.
+Analysis included
+Data quality assessment
+Exploratory Data Analysis (EDA)
+Descriptive statistics
+Employee segmentation
+Correlation analysis
+Chi-square tests
+Welch's t-tests
+Overtime x Job Role interaction analysis
+Business Travel x Department interaction analysis
+Data visualisation
+Business recommendations
+Limitations and ethical considerations
+Key findings
+Overall attrition was 16.12%.
+Employees working overtime had substantially higher observed attrition.
+Frequent business travellers experienced higher attrition.
+Attrition varied across job roles and departments.
+Employees who left were generally younger, earned less, and had shorter organisational tenure.
+Interaction analysis showed that overtime and travel-related attrition patterns differed across roles and departments.
 
 These findings describe associations and do not establish causation.
 
----
-
-## Week 2 - Feature Engineering & Data Preprocessing
+Week 2 - Feature Engineering & Data Preprocessing
 
 Week 2 prepares the same dataset for machine-learning model development.
 
-### Preprocessing performed
+Preprocessing performed
+Duplicate and missing-value validation
+Removal of constant variables:
+EmployeeCount
+Over18
+StandardHours
+Removal of identifier:
+EmployeeNumber
+Binary target encoding
+Feature engineering
+Stratified 80/20 train/test split
+Numerical scaling with StandardScaler
+Categorical encoding with OneHotEncoder
+Leakage-aware preprocessing
+Final dataset validation
+Engineered features
+AgeGroup
+IncomeBand
+TenureGroup
+EarlyCareerFlag
+LongCommuteFlag
+YearsWithoutPromotion
+RoleTenureRatio
+ManagerTenureRatio
+CompanyExperienceRatio
+OvertimeRiskFlag
+Week 2 output
+1,470 rows retained
+0 missing values
+0 duplicate rows
+1,176 training records
+294 testing records
+Training attrition rate: 16.16%
+Testing attrition rate: 15.99%
+30 numerical features
+10 categorical features
+72 transformed machine-learning features
+Final ML-ready dataset: 1,470 x 74
 
-- Duplicate and missing-value validation
-- Removal of constant variables:
-  - `EmployeeCount`
-  - `Over18`
-  - `StandardHours`
-- Removal of identifier:
-  - `EmployeeNumber`
-- Binary target encoding
-- Feature engineering
-- Stratified 80/20 train/test split
-- Numerical scaling with `StandardScaler`
-- Categorical encoding with `OneHotEncoder`
-- Leakage-aware preprocessing
-- Final dataset validation
+The encoder and scaler are fitted on the training set only to reduce data leakage.
 
-### Engineered features
+Week 3 - Advanced Data Analysis, Statistical Validation & Feature Engineering
 
-- `AgeGroup`
-- `IncomeBand`
-- `TenureGroup`
-- `EarlyCareerFlag`
-- `LongCommuteFlag`
-- `YearsWithoutPromotion`
-- `RoleTenureRatio`
-- `ManagerTenureRatio`
-- `CompanyExperienceRatio`
-- `OvertimeRiskFlag`
+Week 3 builds directly on the Week 2 cleaned dataset (cleaned_employee_attrition.csv) - no re-cleaning of the raw data was performed.
 
-### Week 2 output
+Analysis performed
+14 advanced visualisations (numerical, categorical, bivariate, multivariate, correlation, group comparisons, target-variable analysis)
+5 statistical hypothesis tests, each with stated H0/H1, method justification, test statistic, p-value, and business interpretation:
+Chi-square test - Attrition x OverTime
+Chi-square test - Attrition x Marital Status
+Mann-Whitney U test - Monthly Income by Attrition
+Mann-Whitney U test - Distance From Home by Attrition
+Kruskal-Wallis test - Job Satisfaction across Job Role
+Spearman correlation - Years at Company vs. Years with Current Manager
+Feature evaluation and selection (correlation analysis, mutual information, multicollinearity check)
+Dataset refinement into a final modelling dataset
+Business Insights and Recommendations report
+New engineered features
+SatisfactionIndex - composite mean of the four satisfaction/balance survey scores
+CompaRatio - Monthly Income relative to the average for the employee's job level
+JobHopIntensity - number of prior companies relative to total working years
+StagnationRiskFlag - compound flag for overtime + poor work-life balance + no recent promotion
+Feature evaluation decisions
+Removed: LongCommuteFlag - a deterministic re-encoding of DistanceFromHome, redundant.
+Retained with a multicollinearity note: YearsAtCompany, YearsInCurrentRole, YearsWithCurrManager (correlated 0.71-0.84), flagged for later modelling choices.
+Retained with a data-quality note: PerformanceRating has only two observed values across the dataset - a real limitation, not an error.
+Week 3 output
+Final modelling dataset: 1,470 rows x 45 columns
+Business Insights and Recommendations report (Word document)
 
-- **1,470 rows retained**
-- **0 missing values**
-- **0 duplicate rows**
-- **1,176 training records**
-- **294 testing records**
-- Training attrition rate: **16.16%**
-- Testing attrition rate: **15.99%**
-- **30 numerical features**
-- **10 categorical features**
-- **72 transformed machine-learning features**
-- Final ML-ready dataset: **1,470 x 74**
+Key findings: overtime, marital status, and monthly income (relative to job-level peers) are all statistically significantly associated with attrition. Job satisfaction does not differ significantly across job roles - role-level attrition differences are better explained by workload and pay structure than by reported satisfaction.
 
-The encoder and scaler are fitted on the **training set only** to reduce data leakage.
-
----
-
-## Week 3 - Advanced Data Analysis, Statistical Validation & Feature Engineering
-
-Week 3 builds directly on the Week 2 cleaned dataset (`cleaned_employee_attrition.csv`) - no re-cleaning of the raw data was performed.
-
-### Analysis performed
-
-- 14 advanced visualisations (numerical, categorical, bivariate, multivariate, correlation, group comparisons, target-variable analysis)
-- 5 statistical hypothesis tests, each with stated H0/H1, method justification, test statistic, p-value, and business interpretation:
-  - Chi-square test - Attrition x OverTime
-  - Chi-square test - Attrition x Marital Status
-  - Mann-Whitney U test - Monthly Income by Attrition
-  - Mann-Whitney U test - Distance From Home by Attrition
-  - Kruskal-Wallis test - Job Satisfaction across Job Role
-  - Spearman correlation - Years at Company vs. Years with Current Manager
-- Feature evaluation and selection (correlation analysis, mutual information, multicollinearity check)
-- Dataset refinement into a final modelling dataset
-- Business Insights and Recommendations report
-
-### New engineered features
-
-- `SatisfactionIndex` - composite mean of the four satisfaction/balance survey scores
-- `CompaRatio` - Monthly Income relative to the average for the employee's job level
-- `JobHopIntensity` - number of prior companies relative to total working years
-- `StagnationRiskFlag` - compound flag for overtime + poor work-life balance + no recent promotion
-
-### Feature evaluation decisions
-
-- **Removed:** `LongCommuteFlag` - a deterministic re-encoding of `DistanceFromHome`, redundant.
-- **Retained with a multicollinearity note:** `YearsAtCompany`, `YearsInCurrentRole`, `YearsWithCurrManager` (correlated 0.71-0.84), flagged for later modelling choices.
-- **Retained with a data-quality note:** `PerformanceRating` has only two observed values across the dataset - a real limitation, not an error.
-
-### Week 3 output
-
-- Final modelling dataset: **1,470 rows x 45 columns**
-- Business Insights and Recommendations report (Word document)
-
-Key findings: overtime, marital status, and monthly income (relative to job-level peers) are all statistically significantly associated with attrition. Job satisfaction does **not** differ significantly across job roles - role-level attrition differences are better explained by workload and pay structure than by reported satisfaction.
-
----
-
-## Project 1 Repository Structure
-
-```text
+Project 1 Repository Structure
+text
 data/
   WA_Fn-UseC_-HR-Employee-Attrition.csv
   cleaned_employee_attrition.csv
@@ -171,195 +139,174 @@ week3_advanced_analysis_statistical_validation.ipynb
 week3_business_insights_and_recommendations.docx
 week3_data_dictionary.md
 requirements.txt
-```
+Tools Used (Project 1)
+Python
+Jupyter Notebook / Google Colab
+pandas
+NumPy
+Matplotlib
+Seaborn
+SciPy
+scikit-learn
+Project 1 Status
+Completed
+Week 1: Business Understanding & EDA
+Week 2: Feature Engineering & Data Preprocessing
+Week 3: Advanced Data Analysis, Statistical Validation & Feature Engineering
 
-## Tools Used (Project 1)
+This project is not being extended further - it stands as a complete three-week body of work, kept in this repository as part of the internship learning journey.
 
-- Python
-- Jupyter Notebook / Google Colab
-- pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- SciPy
-- scikit-learn
+Project 2: HealthConnect Experience Lab
+AnalystLab Africa Experience Lab - Data Science Track
 
-## Project 1 Status
+Starting Week 4, all AnalystLab Africa interns began contributing to a single shared business problem - HealthConnect Clinic, a fictional healthcare provider - from their own professional track's perspective (Project Management, Data Analytics, Data Science, Machine Learning Engineering, Generative AI).
 
-### Completed
+Central project question: How can HealthConnect Clinic use data and AI to reduce missed appointments and improve the patient support experience?
 
-- Week 1: Business Understanding & EDA
-- Week 2: Feature Engineering & Data Preprocessing
-- Week 3: Advanced Data Analysis, Statistical Validation & Feature Engineering
+This part of the repository contains the Data Science track's contribution only. Complete as of Week 8, the final week of the Experience Lab.
 
-This project is not being extended further - it stands as a complete three-week body of work, kept in this repository as part of the internship learning journey. Active development has moved to the HealthConnect Experience Lab below.
+Project stages
 
----
+Problem Understanding (Week 4) -> Analysis & Development (Week 5) -> Integration & Advanced Development (Week 6) -> Testing & Refinement (Week 7) -> Final Integration & Presentation (Week 8, complete)
 
-# Project 2: HealthConnect Experience Lab
+Week 4 - HealthConnect Project Kickoff & Problem Understanding
 
-## AnalystLab Africa Experience Lab - Data Science Track
+Week 4 is a planning and scoping stage - not a full analysis or a trained model. The goal was to understand the business problem, assess the real appointment dataset, and define the machine learning problem the Data Science track would pursue in later weeks.
 
-Starting Week 4, all AnalystLab Africa interns began contributing to a single shared business problem - **HealthConnect Clinic**, a fictional healthcare provider - from their own professional track's perspective (Project Management, Data Analytics, Data Science, Machine Learning Engineering, Generative AI).
+Dataset reviewed
 
-**Central project question:** How can HealthConnect Clinic use data and AI to reduce missed appointments and improve the patient support experience?
+HealthConnect_Appointment_Data.csv - 5,000 fictional, anonymised appointment records, 18 columns covering patient demographics, appointment details, booking information, prior no-show history, reminder information, distance to clinic, waiting time, and appointment outcome.
 
-This part of the repository contains the **Data Science track's** contribution only.
+HealthConnect_Data_Dictionary.xlsx was never made available across all 5 weeks of this project; column meanings were inferred from the data itself throughout, and this is documented as an unresolved project dependency in the final Week 8 summary.
 
-### Project stages
+Key data findings
+No duplicate rows; missingness is low (under 2% on distance and waiting-time fields), and one apparent gap (reminder_channel) turned out to be structural, not a quality issue.
+The outcome variable is three-valued: No-Show (48.5%), Attended (46.3%), Cancelled (5.3%).
+previous_no_shows and booking_lead_days both show strong, consistent relationships with no-show rate.
+5,000 appointments belong to only 1,696 unique patients (repeat patients), which affects how the data should be split for modelling.
+Proposed target variable
 
-Problem Understanding (Week 4) -> Analysis & Development (Week 5) -> Integration & Advanced Development (Week 6) -> Testing & Refinement (Week 7) -> Final Integration & Presentation (Week 8)
+Binary: did_not_attend (1 = No-Show, 0 = Attended). Cancelled appointments are excluded from this target, since a cancellation is a proactive, advance-notice action, operationally different from a silent no-show.
 
----
-
-## Week 4 - HealthConnect Project Kickoff & Problem Understanding
-
-Week 4 is a planning and scoping stage - not a full analysis or a trained model. The goal was to understand the business problem, assess the real appointment dataset, and define the machine learning problem the Data Science track will pursue in later weeks.
-
-### Dataset reviewed
-
-`HealthConnect_Appointment_Data.csv` - 5,000 fictional, anonymised appointment records, 18 columns covering patient demographics, appointment details, booking information, prior no-show history, reminder information, distance to clinic, waiting time, and appointment outcome.
-
-`HealthConnect_Data_Dictionary.xlsx` was not available at the time of this submission; column meanings were inferred from the data itself and flagged for confirmation once accessible - this remains unresolved as of Week 7.
-
-### Key data findings
-
-- No duplicate rows; missingness is low (under 2% on distance and waiting-time fields), and one apparent gap (`reminder_channel`) turned out to be structural, not a quality issue.
-- The outcome variable is three-valued: `No-Show` (48.5%), `Attended` (46.3%), `Cancelled` (5.3%).
-- `previous_no_shows` and `booking_lead_days` both show strong, consistent relationships with no-show rate.
-- 5,000 appointments belong to only 1,696 unique patients (repeat patients), which affects how the data should be split for modelling.
-
-### Proposed target variable
-
-Binary: `did_not_attend` (`1` = No-Show, `0` = Attended). `Cancelled` appointments are excluded from this target, since a cancellation is a proactive, advance-notice action, operationally different from a silent no-show.
-
-### Week 4 output
-
-- `week4_ml_problem_definition.ipynb`
-- `week4_project_summary.docx`
-
----
-
-## Week 5 - Data Preparation, Feature Engineering & Baseline Model Development
+Week 4 output
+week4_ml_problem_definition.ipynb
+week4_project_summary.docx
+Week 5 - Data Preparation, Feature Engineering & Baseline Model Development
 
 Week 5 moved from planning into practical work: preparing the data, engineering features, defining a train/test strategy, and training a baseline classification model.
 
-### New engineered features
+New engineered features
+personal_noshow_rate - previous no-shows as a share of previous appointments (later refined in Week 6).
+is_new_patient - binary flag for patients with zero prior appointments.
+long_lead_flag - binary flag for bookings made 31+ days in advance.
+high_risk_combo - compound flag: 2+ prior no-shows and a 30+ day booking lead time. The strongest single engineered signal found (75.6% no-show rate vs. a ~50% baseline).
+Train/test strategy
 
-- `personal_noshow_rate` - previous no-shows as a share of previous appointments (later refined in Week 6 - see below).
-- `is_new_patient` - binary flag for patients with zero prior appointments.
-- `long_lead_flag` - binary flag for bookings made 31+ days in advance.
-- `high_risk_combo` - compound flag: 2+ prior no-shows **and** a 30+ day booking lead time. The strongest single engineered signal found (75.6% no-show rate vs. a ~50% baseline).
+A patient-grouped 80/20 split (GroupShuffleSplit on patient_id), verified to have zero patient overlap between train and test.
 
-### Train/test strategy
+Baseline results
+Model	Accuracy	Precision	Recall	F1	ROC-AUC
+Logistic Regression (baseline)	0.626	0.623	0.646	0.634	0.679
+Random Forest (comparison)	0.639	0.647	0.611	0.628	0.682
+Limitation identified
 
-A patient-grouped 80/20 split (`GroupShuffleSplit` on `patient_id`), verified to have **zero patient overlap** between train and test.
+A -1 sentinel value used for first-time patients inside personal_noshow_rate likely distorted that feature's coefficient in the linear model - flagged for Week 6 rather than left unexamined.
 
-### Baseline results
-
-| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|---|---|---|---|---|---|
-| Logistic Regression (baseline) | 0.626 | 0.623 | 0.646 | 0.634 | 0.679 |
-| Random Forest (comparison) | 0.639 | 0.647 | 0.611 | 0.628 | 0.682 |
-
-### Limitation identified
-
-A `-1` sentinel value used for first-time patients inside `personal_noshow_rate` likely distorted that feature's coefficient in the linear model - flagged for Week 6 rather than left unexamined.
-
-### Week 5 output
-
-- `week5_baseline_modelling.ipynb`
-- `week5_project_summary.docx`
-
----
-
-## Week 6 - Model Improvement, Error Analysis & Validation
+Week 5 output
+week5_baseline_modelling.ipynb
+week5_project_summary.docx
+Week 6 - Model Improvement, Error Analysis & Validation
 
 Week 6 did not repeat the Week 5 baseline. It analysed exactly where that baseline failed, fixed the sentinel-value issue it flagged, integrated a cross-track feature, and developed a tuned candidate model.
 
-### Fix applied: `personal_noshow_rate_v2`
+Fix applied: personal_noshow_rate_v2
 
-New patients are now given the **training-set mean no-show rate** (computed from patients with history, training split only) instead of the `-1` sentinel. Correlation with `is_new_patient` dropped from **-0.723 to ~0.002**, confirming the distortion is resolved.
+New patients are now given the training-set mean no-show rate (computed from patients with history, training split only) instead of the -1 sentinel. Correlation with is_new_patient dropped from -0.723 to ~0.002, confirming the distortion is resolved.
 
-### Cross-track integration
+Cross-track integration
 
-**Track worked with:** Data Analytics. A no-show-rate-by-channel breakdown showed real separation across reminder channels, so `reminder_channel` (not just `reminder_sent`) was added as a feature to every non-baseline model. (Documented transparently as a self-produced, provisional finding in the absence of a live Data Analytics deliverable for this submission - re-examined in Week 7.)
+Track worked with: Data Analytics. A no-show-rate-by-channel breakdown showed apparent separation across reminder channels, so reminder_channel (not just reminder_sent) was added as a feature. (Documented transparently as a self-produced, provisional finding in the absence of a live Data Analytics deliverable for this submission - re-examined in Week 7 and again in Week 8.)
 
-### Cross-validated, tuned candidate models
+Cross-validated, tuned candidate models
 
-5-fold patient-grouped cross-validation (`GroupKFold`) plus `RandomizedSearchCV` hyperparameter tuning over Random Forest and Gradient Boosting.
+5-fold patient-grouped cross-validation (GroupKFold) plus RandomizedSearchCV hyperparameter tuning over Random Forest and Gradient Boosting.
 
-| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|---|---|---|---|---|---|
-| Week 5 Baseline (LR, unrefined) | 0.626 | 0.623 | 0.646 | 0.634 | 0.679 |
-| Refined Logistic Regression (fixed features) | ~0.63 | ~0.63 | ~0.65 | ~0.64 | ~0.68 |
-| Tuned Random Forest | - | - | - | - | 0.693 |
-| **Tuned Gradient Boosting (Week 6 candidate)** | 0.641 | 0.638 | **0.652** | **0.645** | 0.689 |
+Model	Accuracy	Precision	Recall	F1	ROC-AUC
+Week 5 Baseline (LR, unrefined)	0.626	0.623	0.646	0.634	0.679
+Tuned Random Forest	-	-	-	-	0.693
+Tuned Gradient Boosting (Week 6 candidate)	0.641	0.638	0.652	0.645	0.689
 
-**Week 6 recommendation:** Tuned Gradient Boosting, on the basis of best recall/F1 among all models tested - re-examined and partly revised in Week 7 (see below).
+Week 6 recommendation: Tuned Gradient Boosting, on the basis of best recall/F1 among all models tested - materially revised in Week 7 after a stability check (see below).
 
-### New issues discovered in Week 6
-
-- `personal_noshow_rate_v2` still correlates with its own raw-count inputs (`previous_no_shows`, `previous_appointments`) - a different multicollinearity concern than the one just fixed.
-- Error rates are meaningfully higher for **Specialist Consultation** appointments and the **65+** age group, with no feature yet explaining why.
-
-### Week 6 output
-
-- `week6_model_improvement.ipynb`
-- `week6_project_summary.docx`
-
----
-
-## Week 7 - Model Testing, Error Analysis & Refinement
+New issues discovered in Week 6
+personal_noshow_rate_v2 still correlates with its own raw-count inputs (previous_no_shows, previous_appointments) - a different multicollinearity concern than the one just fixed.
+Error rates are meaningfully higher for Specialist Consultation appointments and the 65+ age group, with no feature yet explaining why.
+Week 6 output
+week6_model_improvement.ipynb
+week6_project_summary.docx
+Week 7 - Model Testing, Error Analysis & Refinement
 
 Week 7 did not repeat Week 6. It systematically tested the five concrete requirements Week 6's own notebook had flagged as needing testing, refined the model based on real evidence, and re-tested. This is the point where one week's findings materially revised the previous week's recommendation, rather than just confirming it.
 
-### Test 1 - Multicollinearity resolution
+Test 1 - Multicollinearity resolution
 
-Dropping `previous_no_shows` and `previous_appointments` (to remove the correlation with `personal_noshow_rate_v2`) made performance slightly **worse**, not better. Multicollinearity distorts *linear-model* coefficients; it's not the same concern for a tree-based model like Gradient Boosting. **Action:** kept all three features.
+Dropping previous_no_shows and previous_appointments made performance slightly worse, not better. Multicollinearity distorts linear-model coefficients; it's not the same concern for a tree-based model like Gradient Boosting. Action: kept all three features.
 
-### Test 2 - Segment-level testing with confidence intervals
+Test 2 - Segment-level testing with confidence intervals
 
-Bootstrap 95% CIs confirmed the Week 6 concern is real: Specialist Consultation (55.4% recall, CI [45.7%, 65.9%]) and Age 65+ (55.9% recall, CI [46.4%, 65.1%]) both sit meaningfully below Diagnostic Test appointments (82.1% recall). **Action:** documented as a known, unresolved model limitation rather than silently patched.
+Bootstrap 95% CIs confirmed the Week 6 concern is real: Specialist Consultation (55.4% recall, CI [45.7%, 65.9%]) and Age 65+ (55.9% recall, CI [46.4%, 65.1%]) both sit meaningfully below Diagnostic Test appointments (82.1% recall). Action: documented as a known, unresolved model limitation rather than silently patched.
 
-### Test 3 - Threshold analysis
+Test 3 - Threshold analysis
 
-Lowering the classification threshold from 0.50 to **0.40** raised recall from 65.2% to **85.7%** and, unexpectedly, also improved F1 (0.645 -> 0.681) - a genuine improvement with no retraining required. **Action:** adopted threshold = 0.40 as the refined operating point.
+Lowering the classification threshold from 0.50 to 0.40 raised recall from 65.2% to 85.7% and improved F1 (0.645 -> 0.681) - at the cost of accuracy, which dropped from 0.641 to 0.598, and precision, which dropped from 0.638 to 0.565. A genuine, evidence-based trade-off, not a free win. Action: adopted threshold = 0.40 as the refined operating point.
 
-### Test 4 - Stability check across data splits
+Test 4 - Stability check across data splits
 
-Rerunning the Week 6 model comparison on two additional random seeds found the Gradient Boosting candidate's reported edge over Logistic Regression (+0.012 ROC-AUC) does **not** hold up - it was -0.002 and -0.005 on the other two splits (average ~+0.002, within noise). **This revises the Week 6 recommendation**: Gradient Boosting is no longer presented as decisively better, only as the more threshold-tunable option; Logistic Regression is carried forward as a legitimate, more interpretable alternative.
+Rerunning the Week 6 model comparison on two additional random seeds found the Gradient Boosting candidate's reported edge over Logistic Regression (+0.012 ROC-AUC) does not hold up - it was -0.002 and -0.005 on the other two splits (average ~+0.002, within noise). This revised the Week 6 recommendation: Gradient Boosting is no longer presented as decisively better on raw accuracy, only as the more threshold-tunable option; Logistic Regression is carried forward as a legitimate, more interpretable alternative.
 
-### Test 5 - Mandatory HC-POD cross-track testing
+Test 5 - Mandatory HC-POD cross-track testing
 
-Stress-tested the Week 6 `reminder_channel` finding with bootstrap confidence intervals: "a reminder was sent vs. not" is statistically solid, but the channel-to-channel distinction (WhatsApp vs SMS vs Email) is not - their CIs overlap heavily. **Retest:** retrained the model without `reminder_channel`; performance was statistically indistinguishable (0.640 vs 0.641 accuracy). **Validated outcome:** the feature is kept (it's harmless) but the confidence attached to the channel-specific claim is now correctly calibrated as weak, correcting what Week 6 had presented as a solid finding.
+Stress-tested the Week 6 reminder_channel finding with bootstrap confidence intervals: "a reminder was sent vs. not" is statistically solid, but the channel-to-channel distinction (WhatsApp vs SMS vs Email) is not - their CIs overlap heavily. Retest: retrained the model without reminder_channel; performance was statistically indistinguishable (0.640 vs 0.641 accuracy). Validated outcome: the feature is kept (it's harmless) but the confidence attached to the channel-specific claim is now correctly calibrated as weak.
 
-### Refined model (re-tested)
+Week 7 output
+week7_model_testing_refinement.ipynb
+week7_project_summary.docx
+Week 8 - Final Model Selection, Documentation & Presentation (Final Week)
 
-| Metric | Week 5 Baseline (LR) | Week 6 Candidate (GB, threshold=0.50) | Week 7 Refined (GB, threshold=0.40) |
-|---|---|---|---|
-| Accuracy | 0.626 | 0.641 | 0.641 |
-| Precision | 0.623 | 0.638 | 0.565 |
-| Recall | 0.646 | 0.652 | **0.857** |
-| F1-score | 0.634 | 0.645 | **0.681** |
-| ROC-AUC | 0.679 | 0.689 | 0.689 |
+Week 8 consolidated Weeks 5-7 into one confirmed final model and a portfolio-ready case study, rather than repeating any of the prior weeks' development work.
 
-### Model suitability assessment
+Confirmed final candidate
 
-Conditionally ready for limited, monitored use (e.g. a staff-facing risk list) - not yet ready to be presented as a uniformly reliable production model, given the unresolved segment gap and the now-tempered comparison against the simpler baseline.
+Gradient Boosting, operated at a 0.40 classification threshold - chosen specifically for its validated threshold-tunability (Test 3), not for a raw-accuracy advantage over Logistic Regression, since Week 7's stability check found that advantage doesn't reliably hold. Logistic Regression remains documented as a legitimate, more interpretable alternative rather than being discarded.
 
-### Week 7 output
+Full project evolution (final, re-verified numbers)
+Metric	Week 5 Baseline (LR)	Week 6 Candidate (GB, threshold=0.50)	Week 8 Final (GB, threshold=0.40)
+Accuracy	0.626	0.641	0.598
+Precision	0.623	0.638	0.565
+Recall	0.646	0.652	0.857
+F1-score	0.634	0.645	0.681
+ROC-AUC	0.679	0.689	0.689
 
-- `week7_model_testing_refinement.ipynb`
-- `week7_project_summary.docx`
+(Note: an earlier version of this table, referenced in the Week 7 write-up, incorrectly listed the threshold=0.40 accuracy as 0.641 - a transcription error, not a recomputation. 0.598 is the correct, code-verified figure, confirmed in week8_final_model_documentation.ipynb.)
 
----
+Final feature and model decisions
+Kept personal_noshow_rate_v2, previous_no_shows, and previous_appointments together despite their correlation - removing the raw counts made the tree-based model slightly worse, so the Week 6 multicollinearity concern was correctly resolved by not acting on it.
+Kept reminder_channel, with corrected confidence - harmless to performance, but the channel-specific claim is documented as statistically weak rather than solid.
+Excluded waiting_time_minutes for all 5 weeks of the project - an unconfirmed leakage risk that was never resolved because the data dictionary never arrived.
+Business suitability - what the model can and cannot be used for
 
-## HealthConnect Repository Structure
+Can be used for: a staff-facing risk list to prioritise reminder calls, particularly for Follow-up and Diagnostic Test appointments where the model is most reliable.
+
+Cannot currently be used for: fully automated intervention decisions, or unreviewed judgements about individual patients in the Specialist Consultation or 65+ segments, given the documented, unresolved reliability gap there.
+
+Week 8 output
+week8_final_model_documentation.ipynb - final candidate confirmation, full baseline-to-final comparison, consolidated error analysis, feature/model decisions, business interpretation, HC-POD final integration record, and a non-technical stakeholder summary.
+week8_video_presentation_script.docx - full script for the mandatory individual 5-10 minute final presentation video.
+HealthConnect Repository Structure
 
 HealthConnect files are kept alongside the attrition project files at the root of this repository, following the same flat layout used since Week 1:
 
-```text
+text
 data/
   HealthConnect_Appointment_Data.csv   (alongside the attrition data files)
 
@@ -371,39 +318,28 @@ week6_model_improvement.ipynb
 week6_project_summary.docx
 week7_model_testing_refinement.ipynb
 week7_project_summary.docx
-```
+week8_final_model_documentation.ipynb
+week8_video_presentation_script.docx
+Tools Used (HealthConnect - Data Science track)
+Python
+Jupyter Notebook / Google Colab
+pandas
+NumPy
+Matplotlib
+Seaborn
+scikit-learn
+HealthConnect Project Status
+Completed - Data Science track, all 5 weeks
+Week 4: Problem Understanding
+Week 5: Data Preparation, Feature Engineering & Baseline Model Development
+Week 6: Model Improvement, Error Analysis & Validation
+Week 7: Model Testing, Error Analysis & Refinement
+Week 8: Final Model Selection, Documentation & Presentation
 
-## Tools Used (HealthConnect - Data Science track)
+The HealthConnect Experience Lab is now complete for the Data Science track.
 
-- Python
-- Jupyter Notebook / Google Colab
-- pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- scikit-learn
-
-## HealthConnect Project Status
-
-### Completed
-
-- Week 4: Problem Understanding (Data Science track)
-- Week 5: Data Preparation, Feature Engineering & Baseline Model Development (Data Science track)
-- Week 6: Model Improvement, Error Analysis & Validation (Data Science track)
-- Week 7: Model Testing, Error Analysis & Refinement (Data Science track)
-
-### Next Stage
-
-**Week 8: Final Integration & Presentation**
-
-### Outstanding before Week 8
-
-- `HealthConnect_Data_Dictionary.xlsx` still unavailable, now flagged for four consecutive weeks (affects `waiting_time_minutes`, which remains excluded on an unconfirmed leakage concern).
-- Decide whether to present Gradient Boosting alone or alongside Logistic Regression at final integration, given Week 7's stability-check finding.
-- No real HealthConnect intervention-capacity figure yet exists to fully validate the Week 7 threshold choice (0.40) against actual operational limits.
-
----
-
-## Repository
-
-https://github.com/Justcorplabs/employee-attrition-analysis
+Outstanding items, documented rather than hidden
+HealthConnect_Data_Dictionary.xlsx was never made available across the full 5-week project - waiting_time_minutes remains excluded on an unconfirmed leakage concern as a result.
+No real HealthConnect intervention-capacity figure ever existed to fully validate the final 0.40 threshold choice against actual operational limits.
+The Specialist Consultation / 65+ segment reliability gap was confirmed as real (Week 7) but never explained - a genuine open item for any future continuation of this project.
+Cross-track collaboration (Data Analytics) was self-produced throughout, since no live Data Analytics deliverable existed for this individual submission - documented transparently at each stage rather than presented as a real handoff.
